@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C/C++",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/output/${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true, // true为选择外置终端、false为选择vdcode内置终端
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:\\My_Software\\mingw64\\bin\\gdb.exe", // 这里要替换成你的mingw64的gdb.exe的位置，不要写成gcc，这个是debug的exe
+            "preLaunchTask": "g++",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+             
+        },
+    ]
+}
