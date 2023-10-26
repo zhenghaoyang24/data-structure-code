@@ -29,27 +29,51 @@ void InsertSort(int arr[], int len)
     }
 }
 
+// 1-2希尔排序(对间隔gap的一组数组元素进行直接插入排序)
+void shellSort(int arr[], int len)
+{
+    int gap, i, j, temp;
+    for (gap = len / 2; gap >= 1; gap = gap / 2)
+    {
+        for (i = gap; i < len; i++)  //以gap为间距进行直接插入排序
+        {
+            if (arr[i] < arr[i - gap])
+            {
+                temp = arr[i];
+                for (j = i - gap; j >= 0 && arr[j] > temp; j-=gap)
+                {
+                    arr[j + gap] = arr[j];
+                }
+                arr[j + gap] = temp;
+            }
+        }
+    }
+}
+
 // 2.交换排序
 // 2-1.冒泡排序
 void bubble_sort(int arr[], int n)
 {
     for (int i = 0; i < n; i++)
     {
+        bool flag= false;
         for (int j = 0; j < n - i - 1; j++)
         {
             if (arr[j] > arr[j + 1])
             {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
+                swap(&arr[j], &arr[j + 1]);
+                flag =true;
             }
         }
+        if (flag==false)
+        return;
+        
     }
 }
 
 // 2-2.快速排序
 // 划分数据为两个部分
-int Partition(int arr[], int low, int high)   //high=len-1
+int Partition(int arr[], int low, int high) // high=len-1
 {
     int pivot = arr[low];
     while (low < high)
@@ -61,11 +85,11 @@ int Partition(int arr[], int low, int high)   //high=len-1
             low++;
         arr[high] = arr[low];
     }
-    arr[low] = pivot;
+    arr[low] = pivot; // 结束后，基准元素则固定了
     return low;
 }
 // 快速排序(递归)
-void quick_sort_recursive(int arr[], int low, int high)   //high=len-1
+void quick_sort_recursive(int arr[], int low, int high) // high=len-1
 {
     if (low < high)
     {
@@ -91,9 +115,7 @@ void selectSort(int arr[], int n)
         }
         if (min != i)
         {
-            int temp = arr[i];
-            arr[i] = arr[min];
-            arr[min] = temp;
+            swap(&arr[i], &arr[min]);
         }
     }
 }
@@ -116,7 +138,7 @@ void HeadAdjust(int arr[], int start, int end)
         else
         { // 否则交换父节点与最大孩子的位置
             swap(&arr[dad], &arr[son]);
-            dad = son;
+            dad = son;      //将大的一个孩子作为父节点，在一次检查
             son = dad * 2 + 1;
         }
     }
@@ -128,33 +150,35 @@ void HeapSort(int arr[], int len)
     // 对非叶结点进行堆处理
     for (i = len / 2 - 1; i >= 0; i--)
     {
-        HeadAdjust(arr, i, len - 1); // 对非叶结点进行堆处理
+        HeadAdjust(arr, i, len - 1); // 对非叶结点进行堆处理，从后往前处理
     }
     for (i = len - 1; i > 0; i--) // 对所有元素进行排序
     {
+     
         swap(&arr[0], &arr[i]);
+        // printf("%d\n",arr[i]);
         HeadAdjust(arr, 0, i - 1); // 因为此时arr[i]元素已经最大，无需参加堆处理
     }
 }
 
 // 4.归并排序
-int *B = (int *)malloc(30 * sizeof(int));  //记得free
+int *B = (int *)malloc(1000 * sizeof(int)); // 记得free
 // 分隔序列
 void Merge(int arr[], int low, int mid, int high)
 {
     int i, j, k;
     for (k = low; k <= high; k++)
     {
-        B[k] = arr[k];   //现将待排序序列复制给B
+        B[k] = arr[k]; // 现将待排序序列复制给B
     }
     for (i = low, j = mid + 1, k = i; i <= mid && j <= high; k++)
     {
-        if (B[i] <= B[j])   //比较两部分大小（<=为了保证稳定性）
-            arr[k] = B[i++];   //将小的复制给arr
+        if (B[i] <= B[j])    // 比较两部分大小（<=为了保证稳定性）
+            arr[k] = B[i++]; // 将小的复制给arr
         else
             arr[k] = B[j++];
     }
-    while (i <= mid)    //将剩余的元素直接复制给arr
+    while (i <= mid) // 将剩余的元素直接复制给arr
         arr[k++] = B[i++];
     while (j <= high)
         arr[k++] = B[j++];
@@ -165,9 +189,9 @@ void MergeSort(int arr[], int low, int high)
     if (low < high)
     {
         int mid = (low + high) / 2;
-        MergeSort(arr, low, mid);     //当只有一个元素时，low==mid，不能在分
+        MergeSort(arr, low, mid); // 当只有一个元素时，low==mid，不能在分
         MergeSort(arr, mid + 1, high);
-        Merge(arr, low, mid, high);   //merge最短会接受两个元素
+        Merge(arr, low, mid, high); // merge最短会接受两个元素
     }
 }
 
@@ -213,10 +237,10 @@ void copyArray(int source[], int destination[], int size)
 
 int main()
 {
-
-    int arr[10]; // 数组长度为10，可以根据需要修改
-    creat_random_array(arr, 10);
-    int len = (int)sizeof(arr)/sizeof(*arr);
+    int len = 10;
+    int arr[len]; // 初始数组长度为10
+    creat_random_array(arr, len);
+    // int len = (int)sizeof(arr)/sizeof(*arr);
 
     // 直接插入排序
     int arr1[len];
@@ -225,38 +249,49 @@ int main()
     show_array(arr1, len);
     printf("(直接插入排序)\n");
 
+
+
+    // 希尔排序
+    int arr7[len];
+    copyArray(arr, arr7, len);
+    shellSort(arr7,len);
+    show_array(arr7, len);
+    printf("(希尔排序)\n");
+
+
     // 冒泡排序
-    int arr2[30];
+    int arr2[len];
     copyArray(arr, arr2, len);
     bubble_sort(arr2, len);
     show_array(arr2, len);
     printf("(冒泡排序)\n");
-    // 快速排序
 
-    int arr3[30];
+    // 快速排序
+    int arr3[len];
     copyArray(arr, arr3, len);
-    quick_sort_recursive(arr3, 0, len-1);
+    quick_sort_recursive(arr3, 0, len - 1);
     show_array(arr3, len);
     printf("(快速排序)\n");
 
     // 简单选择排序
-    int arr4[30];
+    int arr4[len];
     copyArray(arr, arr4, len);
     selectSort(arr4, len);
     show_array(arr4, len);
     printf("(简单选择排序)\n");
 
     // 堆排序
-    int arr5[30];
+    int arr5[len];
     copyArray(arr, arr5, len);
     HeapSort(arr5, len);
     show_array(arr5, len);
     printf("(堆排序后)\n");
 
     // 归并排序
-    int arr6[30];
+    int arr6[len];
     copyArray(arr, arr6, len);
-    MergeSort(arr6, 0, len-1);
+    MergeSort(arr6, 0, len - 1);
     show_array(arr6, len);
+    free(B);
     printf("(归并排序)");
 }
