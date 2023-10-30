@@ -69,7 +69,7 @@ int LocateElem(SqList L, int e)
 	{
 		if (L.data[i] == e)
 		{
-			return i + 1; // �ҵ��󷵻�λ��
+			return i + 1; 
 		}
 	}
 	return 0;
@@ -132,19 +132,19 @@ bool reverse(SqList &L)
 	return true;
 }
 
-// 时间复杂度为O(n),空间复杂度为O(1)，删除表中为x的元素，快慢指针
+// 时间复杂度为O(n),空间复杂度为O(1)，删除表中为x的元素，快慢指针,慢指针停留在符合删除元素的位置，fast则继续向后查找
 void deleteByX(SqList &L, int x)
 {
-	int k = 0, i; // 需要删的个数
-	for (i = 0; i < L.length; i++)
+	int low = 0, fast; // 需要删的个数
+	for ( fast= 0; fast < L.length; fast++)
 	{
-		if (L.data[i] != x)//把不符合要求的范围放在判断里面
+		if (L.data[fast] != x)//把不符合要求的范围放在判断里面
 		{
-			L.data[k] = L.data[i];
-			k++;
+			L.data[low] = L.data[fast];
+			low++;
 		}
 	}
-	L.length = k;
+	L.length = low;
 }
 void CreateList(SqList &L)
 {
