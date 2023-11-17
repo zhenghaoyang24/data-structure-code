@@ -18,8 +18,7 @@ bool InitStack(LiStack &S)
 // 进栈
 bool Push(LiStack &S, int elem)
 {
-    LinkNode *s;
-    s = (LinkNode *)malloc(sizeof(LinkNode));
+    LinkNode *s= (LinkNode *)malloc(sizeof(LinkNode));
     s->data = elem;
     s->next = S;
     S = s;

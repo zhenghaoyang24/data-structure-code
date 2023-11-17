@@ -10,7 +10,7 @@ typedef struct LinkNode
 } LinkNode;
 
 // 定义链式队列
-typedef struct
+typedef struct LinkQueue
 {
     LinkNode *front, *rear; // 队列的头指针与尾指针
     /* data */
@@ -55,7 +55,7 @@ bool DeQueue(LinkQueue &Q, int &x)
     Q.front->next = p->next;
     if (Q.rear == p) // 判断被删除的节点是否为最后一个节点，如果是则要更改队尾指针
     {
-        Q.rear = Q.front;
+        Q.rear = Q.front; 
     }
     free(p);
     return true;
