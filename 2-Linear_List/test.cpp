@@ -3,7 +3,7 @@
 
 typedef int ElemType;
 
-// 定义一个单链表节点类型
+// 定义一个单链表节点类型；
 typedef struct LNode
 {
 	ElemType data;			// 节点数据元素
